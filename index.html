@@ -1,0 +1,30 @@
+<p>Exporte no Star-UML como SVG e importe o SVG:</p>
+<input type="file" name="file" class="file" multiple>
+<output>
+</output>
+
+<script>
+    let o = globalThis.document.querySelector("output");
+
+    let f = globalThis.document.querySelector(".file");
+    f.addEventListener("change", handleFiles, false);
+
+    function handleFiles() {
+        const fileList = this.files;
+        for (let i = 0; i < fileList.length; i++) {
+            let file = fileList[i];
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                let blobx = new Blob([e.target.result.replaceAll("UNREGISTERED", "")], {type: 'image/svg+xml'});
+                let elemx = window.document.createElement('a');
+                elemx.href = window.URL.createObjectURL(blobx); // ! createObjectURL
+                elemx.download = "fixed_" + file.name
+                elemx.style.display = 'none';
+                document.body.appendChild(elemx);
+                elemx.click();
+            };
+            reader.readAsText(file)
+        }
+    }
+</script>
